@@ -4,7 +4,7 @@ import './CityItem.scss'
 export const CityItem : React.FC<any> = (props) => {
   return (
     <div className="city-item">
-      {props.name}
+      {props.city.name}
     </div>
   );
 };

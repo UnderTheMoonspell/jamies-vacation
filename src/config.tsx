@@ -33,7 +33,7 @@ export default class Config {
     GET_WEATHER_BY_CITY: (city: string) =>
       `/weather?q=${city}${OpenWeatherAPIKeyQS}&units=metric`,
     LOCATIONS: (term: string) =>
-      `/locations?term=${term}&location_types=city&sort=name`,
+      `/locations?term=${term}&location_types=airport&sort=name`,
     GET_TICKET_INFO: (
       from: string,
       to: string,

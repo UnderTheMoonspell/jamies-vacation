@@ -41,7 +41,7 @@ export const CityCard: React.FC<CityCardProps> = (props) => {
             <span>Temperature: {props.city.weather?.temp} º</span>
             <span>Humidity: {props.city.weather?.humidity} %</span>
           </div>
-          <span className="price-info">{props.city.ticket_price}€</span>
+          <span className="price-info">{props.city.price}€</span>
         </Card.Description>
       </Card.Content>
     </Card>

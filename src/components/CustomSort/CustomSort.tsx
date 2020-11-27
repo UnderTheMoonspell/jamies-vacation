@@ -6,13 +6,13 @@ export type CustomSortProps = {
   options: DropdownItemProps[];
   name: string;
   placeholder: string;
-  onSortFieldChange: (sortField: string, direction?: Array<"desc" | "asc">) => {};
+  onSortFieldChange: (sortField: string) => void;
 }
 
 export const CustomSort: React.FC<CustomSortProps> = ({onSortFieldChange, ...props}) => {
 
   const customChange = (event: SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
-    onSortFieldChange(data.value! as string, ['asc'])
+    onSortFieldChange(data.value! as string)
   }
 
   return (

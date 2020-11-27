@@ -1,20 +1,35 @@
 import Config from 'config';
+import { AnyARecord } from 'dns';
 import { City } from 'models/City';
 import { Weather } from 'models/Weather';
 import { useEffect, useRef, useState } from 'react';
 import { kiwiAPI, weatherAPI } from 'services/api.service';
+import { sortFunction } from 'services/utils.service';
 import { useAPI } from './api.hook';
 import { useEffectSkipFirstRun } from './use-effect-skip-first.hook';
 
 export type CityHook = {
   cities: City[];
   isLoading: boolean;
+  sortCities: (field: string) => void;
 };
 
 export const useCity = (selectedCity: any) => {
   const [cities, setCities] = useState<City[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   // const { isLoading, result, setUrl } = useAPI(ticketsAPI);
+
+  const sortCities = (field: string) => {
+    // console.log(cities)
+    // cities.sort((a, b) => sortFunction(a, b, field))
+    // console.log(cities)
+    setCities(prevCities => {
+      console.log(prevCities)
+      let sortedCities = prevCities.sort((a, b) => sortFunction(a, b, field))
+      console.log(sortedCities)
+      return sortedCities
+    })
+  }
 
   useEffect(() => {
     const getDestinationsWeather = async () =>
@@ -27,7 +42,8 @@ export const useCity = (selectedCity: any) => {
           setCities((cities) => [
             ...cities,
             { 
-              name: city.name, 
+              name: city.name,
+              feels_like: cityWeather.main.feels_like,
               weather: { 
                 icon: cityWeather.weather[0].icon,
                 humidity: cityWeather.main.humidity,
@@ -52,18 +68,16 @@ export const useCity = (selectedCity: any) => {
             Config.endpoints.GET_TICKET_INFO(selectedCity.code, availableCities.code, '23/12/2020', '31/12/2022')
           );
           setCities((cities) => {
-            //TODO optimization
-            debugger
+            //TODO this could be normalized, the property access would be much more immediate
             const newState = cities.map((city) => {
               if (city.name === availableCities.name) {
-                return { ...city, ticket_price: ticketInfo.data[0].price };
+                return { ...city, id: ticketInfo.data[0].id, price: ticketInfo.data[0].price };
               } else {
                 return city;
               }
             })
-            .sort((a: City, b: City) => (a.ticket_price > b.ticket_price) ? 1 : ((b.ticket_price > a.ticket_price) ? -1 : 0))
+            .sort((a, b) => sortFunction(a, b, 'feels_like'))
             return newState; 
-            // [...cities, { name: cityWeather.name, weather: cityWeather.weather}]
           });
         })
       );
@@ -82,5 +96,6 @@ export const useCity = (selectedCity: any) => {
   return {
     cities,
     isLoading,
+    sortCities
   } as CityHook;
 };

@@ -14,49 +14,62 @@ import { CityCard } from 'components/CityCard/CityCard';
 // import { CustomSearch } from 'components/CustomSearch/CustomSearch';
 
 const Home = () => {
-  const [selectedCity, setSelectedCity] = useState()
-  const { cities, isLoading } = useCity(selectedCity);
+  const [selectedCity, setSelectedCity] = useState();
+  const { cities, isLoading, sortCities } = useCity(selectedCity);
 
-  // const {
-  //   paginatedData,
-  //   currentPage,
-  //   onChangePage,
-  //   onChangeSort,
-  //   isLoading,
-  //   totalPages,
-  // } = usePaginatioAndSort<NewsModel>(getNews);
+  const onChangeSort = (sortField: string) => {
+    sortCities(sortField);
+  };
+
+  const areResultsFetched = () => cities[0]?.price;
 
   const sortOptions = [
     {
-      text: 'Start Date',
-      value: 'start_date',
+      text: 'Weather',
+      value: 'feels_like',
     },
     {
-      text: 'Id',
-      value: 'id',
+      text: 'Price',
+      value: 'price',
     },
   ] as DropdownItemProps[];
 
-  const getCitiesInfo = () => cities.map((city: City, idx:number) => (
-    <CityCard key={city.id} city={city} is_best={!idx} />
-  ))
+  const getCitiesInfo = () =>
+    cities.map((city: City, idx: number) => (
+      <CityCard key={city.id} city={city} is_best={!idx} />
+    ));
 
   return (
     <div className='home'>
       <h1>Going back to office planner</h1>
       <h2>Where are you flying from ?</h2>
-      <CustomSearch 
-        url={Config.endpoints.LOCATIONS} 
-        renderedItem={(props: any) => <CityItem {...props} /> }
+      <CustomSearch
+        url={Config.endpoints.LOCATIONS}
+        renderedItem={(props: any) => <CityItem {...props} />}
         clickHandler={setSelectedCity}
       />
-        {isLoading ? (
-          <CustomLoader />
-        ) : (
+      {isLoading ? (
+        <CustomLoader />
+      ) : (
+        <>
+          {areResultsFetched() && (
+            <CustomSort
+              name='city-sort'
+              placeholder='Sort By'
+              options={sortOptions}
+              onSortFieldChange={onChangeSort}
+              data-testid='city-sort'
+            />
+          )}
           <div className='results-container'>
-            {cities[0]?.ticket_price ? getCitiesInfo() : <div>Please choose your origin</div>}
+            {areResultsFetched() ? (
+              getCitiesInfo()
+            ) : (
+              <div>Please choose your origin</div>
+            )}
           </div>
-        )}
+        </>
+      )}
     </div>
   );
 };

@@ -33,12 +33,22 @@ export const CustomSearch: React.FC<SearchComponentProps> = (props) => {
   };
 
   const canShowResults = () =>
-    result && result.locations?.length && searchTerm.length >= 3;
+    (result &&
+    result.locations?.length > 1 &&
+    searchTerm.length >= 3) ||
+    (result && result.locations?.length === 1 
+      && Config.destinations.findIndex(destination => destination.name === result.locations[0].city.name) < 0);
+
+  const getFilteredResults = (): any[] => {
+      return result.locations.filter(
+        (city: any) => Config.destinations.findIndex(destination => destination.name === city.city.name) < 0
+      ) as any[];
+  };
 
   const clickItem = (searchResult: any) => {
     props.clickHandler(searchResult);
-    setSearchTerm('')
-  }
+    setSearchTerm('');
+  };
 
   return (
     <div className={`ui search ${isLoading && 'loading'}`}>
@@ -56,7 +66,7 @@ export const CustomSearch: React.FC<SearchComponentProps> = (props) => {
       </div>
       <div className={`results transition ${!!searchTerm.length && 'visible'}`}>
         {canShowResults() ? (
-          result.locations.map((searchResult: any) => (
+          getFilteredResults().map((searchResult: any) => (
             <div
               className='result'
               key={searchResult.id}

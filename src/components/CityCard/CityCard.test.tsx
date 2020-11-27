@@ -7,7 +7,7 @@ import { CityCard } from './CityCard';
 const city = {
   id: 1,
   name: 'Madrid',
-  ticket_price: 100
+  price: 100
 } as City;
 
 it('Renders cityCard', () => {
