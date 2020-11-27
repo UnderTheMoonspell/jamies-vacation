@@ -1,14 +1,25 @@
-import { City } from 'models/City';
 import { formattedDate } from 'services/utils.service';
 
-const OpenWeatherAPIKeyQS: string = `&APPID=f0e307920b21ae38564d922c31d05753`;
+const OpenWeatherAPIKeyQS: string = `&appid=f0e307920b21ae38564d922c31d05753`;
 
 export default class Config {
-  static destinations: string[] = ['Amsterdam', 'Madrid', 'Budapest'];
+  static destinations: any[] = [
+    {
+      name: 'Amsterdam',
+      code: 'AMS',
+    },
+    {
+      name: 'Madrid',
+      code: 'MAD',
+    },
+    {
+      name: 'Budapest',
+      code: 'BUD',
+    },
+  ];
 
   static weatherBaseUrl: string = `https://api.openweathermap.org/data/2.5`;
-  static ticketsBaseUrl: string = `https://api.skypicker.com`;
-  static locationsBaseUrl: string = `https://wft-geo-db.p.rapidapi.com/v1/geo/cities`;
+  static kiwiBaseURL: string = `https://api.skypicker.com`;
 
   static imageMediaServer: string = 'https://media.dazzletag.com/';
 
@@ -20,9 +31,15 @@ export default class Config {
 
   static endpoints = {
     GET_WEATHER_BY_CITY: (city: string) =>
-      `/weather?q=${city}${OpenWeatherAPIKeyQS}`,
-    LOCATIONS: (term: string) => `?namePrefix=${term}&minPopulation=500000&type=city`,
-    GET_TICKET_INFO: (from: string, to: string, dateFrom: string, dateTo: string) => 
-      `/flights?cityFrom=${from}&cityTo=${to}&date_from=${dateFrom}&date_to=${dateTo}&partner=picky`,
+      `/weather?q=${city}${OpenWeatherAPIKeyQS}&units=metric`,
+    LOCATIONS: (term: string) =>
+      `/locations?term=${term}&location_types=city&sort=name`,
+    GET_TICKET_INFO: (
+      from: string,
+      to: string,
+      dateFrom: string,
+      dateTo: string
+    ) =>
+      `/flights?flyFrom=${from}&to=${to}&date_from=${dateFrom}&date_to=${dateTo}&curr=EURmax_stopovers=0&sort=price&limit=1&partner=picky`,
   };
 }

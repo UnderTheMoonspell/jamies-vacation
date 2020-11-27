@@ -10,8 +10,7 @@ class Api {
 
   public constructor(baseUrl: string) {
     this.instance = axios.create({
-      baseURL: baseUrl,
-      withCredentials: true
+      baseURL: baseUrl
     });
 
     this._initializeResponseInterceptor();
@@ -39,5 +38,4 @@ class Api {
 }
 
 export const weatherAPI = new Api(Config.weatherBaseUrl)
-export const ticketsAPI = new Api(Config.ticketsBaseUrl)
-export const locationsAPI = new Api(Config.locationsBaseUrl)
+export const kiwiAPI = new Api(Config.kiwiBaseURL)

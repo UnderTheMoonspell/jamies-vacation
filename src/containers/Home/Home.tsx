@@ -10,11 +10,12 @@ import { useCity } from 'hooks/city.hook';
 import { City } from 'models/City';
 import { CustomSearch } from 'components/CustomSearch/CustomSearch';
 import { CityItem } from 'components/CityItem/CityItem';
+import { CityCard } from 'components/CityCard/CityCard';
 // import { CustomSearch } from 'components/CustomSearch/CustomSearch';
 
 const Home = () => {
   const [selectedCity, setSelectedCity] = useState()
-  const { cities } = useCity(selectedCity);
+  const { cities, isLoading } = useCity(selectedCity);
 
   // const {
   //   paginatedData,
@@ -36,42 +37,26 @@ const Home = () => {
     },
   ] as DropdownItemProps[];
 
+  const getCitiesInfo = () => cities.map((city: City, idx:number) => (
+    <CityCard key={city.id} city={city} is_best={!idx} />
+  ))
+
   return (
     <div className='home'>
-      <h1>Home</h1>
-      Where are you flying from ? 
+      <h1>Going back to office planner</h1>
+      <h2>Where are you flying from ?</h2>
       <CustomSearch 
         url={Config.endpoints.LOCATIONS} 
         renderedItem={(props: any) => <CityItem {...props} /> }
         clickHandler={setSelectedCity}
       />
-      {/* <div className='paginated-content'>
-        <CustomSort
-          name='news-sort'
-          placeholder='Sort By'
-          options={sortOptions}
-          onSortFieldChange={onChangeSort}
-          data-testid='news-sort'
-        />
-
         {isLoading ? (
           <CustomLoader />
         ) : (
-          <div className='news-container'>
-            {paginatedData.map((news: NewsModel) => (
-              <NewsCard key={news.id} {...news} />
-            ))}
+          <div className='results-container'>
+            {cities[0]?.ticket_price ? getCitiesInfo() : <div>Please choose your origin</div>}
           </div>
         )}
-
-        {!!totalPages && (
-          <CustomPagination
-            activePage={currentPage}
-            onPageChange={onChangePage}
-            totalPages={totalPages}
-          />
-        )}
-      </div> */}
     </div>
   );
 };

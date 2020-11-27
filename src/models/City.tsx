@@ -1,5 +1,10 @@
+import { Weather } from "./Weather";
+
 export type City = {
+  id: number;
   name: string;
-  weather?: number;
-  ticket_price?: number;
+  weather?: Weather;
+  ticket_price: number;
+  image: string;
+  code: string;
 }

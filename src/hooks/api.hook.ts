@@ -31,7 +31,7 @@ export const useAPI = (APIInstance: any) => {
     const executeApiCall = async () => {
       try {
         updateState({ isLoading: true });
-        const result = await (APIInstance as any)[apiOptions.method](apiOptions.url, { headers: apiOptions.headers });
+        const result = await (APIInstance as any)[apiOptions.method](apiOptions.url);
         updateState({ result: result, isLoading: false });
       } catch (ex) {
         updateState({ error: ex });

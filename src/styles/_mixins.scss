@@ -67,13 +67,6 @@ $grid-breakpoints: (
       calc(33.3% - #{$grid-margin-x} * 2 / 3)
       calc(33.3% - #{$grid-margin-x} * 2 / 3);
   }
-  @include media-breakpoint-up(xl) {
-    grid-template-columns:
-      calc(25% - #{$grid-margin-x} * 3 / 4)
-      calc(25% - #{$grid-margin-x} * 3 / 4)
-      calc(25% - #{$grid-margin-x} * 3 / 4)
-      calc(25% - #{$grid-margin-x} * 3 / 4);
-  }
 }
 
 @mixin _text-truncate-at-line($idx) {

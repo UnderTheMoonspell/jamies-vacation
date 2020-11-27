@@ -1,7 +1,7 @@
 import Config from 'config';
 import { useAPI } from 'hooks/api.hook';
 import React, { ReactElement, useState } from 'react';
-import { locationsAPI, ticketsAPI } from 'services/api.service';
+import { kiwiAPI } from 'services/api.service';
 import { CityItem } from '../CityItem/CityItem';
 
 type SearchRenderComponents = typeof CityItem;
@@ -18,7 +18,7 @@ type SearchComponentProps = {
 
 export const CustomSearch: React.FC<SearchComponentProps> = (props) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const { isLoading, result, setUrl } = useAPI(locationsAPI);
+  const { isLoading, result, setUrl } = useAPI(kiwiAPI);
 
   const handleSearchChange = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -33,7 +33,7 @@ export const CustomSearch: React.FC<SearchComponentProps> = (props) => {
   };
 
   const canShowResults = () =>
-    result && result.data?.length && searchTerm.length >= 3;
+    result && result.locations?.length && searchTerm.length >= 3;
 
   const clickItem = (searchResult: any) => {
     props.clickHandler(searchResult);
@@ -56,7 +56,7 @@ export const CustomSearch: React.FC<SearchComponentProps> = (props) => {
       </div>
       <div className={`results transition ${!!searchTerm.length && 'visible'}`}>
         {canShowResults() ? (
-          result.data.map((searchResult: any) => (
+          result.locations.map((searchResult: any) => (
             <div
               className='result'
               key={searchResult.id}

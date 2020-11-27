@@ -1,7 +1,8 @@
 import Config from 'config';
 import { City } from 'models/City';
+import { Weather } from 'models/Weather';
 import { useEffect, useRef, useState } from 'react';
-import { ticketsAPI, weatherAPI } from 'services/api.service';
+import { kiwiAPI, weatherAPI } from 'services/api.service';
 import { useAPI } from './api.hook';
 import { useEffectSkipFirstRun } from './use-effect-skip-first.hook';
 
@@ -12,6 +13,7 @@ export type CityHook = {
 
 export const useCity = (selectedCity: any) => {
   const [cities, setCities] = useState<City[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   // const { isLoading, result, setUrl } = useAPI(ticketsAPI);
 
   useEffect(() => {
@@ -20,11 +22,18 @@ export const useCity = (selectedCity: any) => {
         Config.destinations.map(async (city) => {
           //rework apiHook to accept consecutive updates
           let cityWeather = await weatherAPI.get(
-            Config.endpoints.GET_WEATHER_BY_CITY(city)
+            Config.endpoints.GET_WEATHER_BY_CITY(city.name) //Types for given cities
           );
           setCities((cities) => [
             ...cities,
-            { name: cityWeather.name, weather: cityWeather.weather },
+            { 
+              name: city.name, 
+              weather: { 
+                icon: cityWeather.weather[0].icon,
+                humidity: cityWeather.main.humidity,
+                temp: cityWeather.main.temp
+              } as Weather
+            } as City
           ]);
         })
       );
@@ -35,26 +44,31 @@ export const useCity = (selectedCity: any) => {
 
   useEffect(() => {
     debugger;
-    const getDestinationsPrices = async () =>
+    const getDestinationsPrices = async () => {
+      setIsLoading(true)
       await Promise.all(
-        Config.destinations.map(async (city) => {
-          let ticketInfo = await ticketsAPI.get(
-            Config.endpoints.GET_TICKET_INFO(selectedCity.name, city, '23%2F12%2F2020', '30%2F04%2F2020')
+        Config.destinations.map(async (availableCities) => {
+          let ticketInfo = await kiwiAPI.get(
+            Config.endpoints.GET_TICKET_INFO(selectedCity.code, availableCities.code, '23/12/2020', '31/12/2022')
           );
           setCities((cities) => {
             //TODO optimization
-            const newStates = cities.map((city) => {
-              if (city === selectedCity.name) {
-                return { ...city, ticket_price: ticketInfo.price };
+            debugger
+            const newState = cities.map((city) => {
+              if (city.name === availableCities.name) {
+                return { ...city, ticket_price: ticketInfo.data[0].price };
               } else {
                 return city;
               }
-            });
-            return newStates;
+            })
+            .sort((a: City, b: City) => (a.ticket_price > b.ticket_price) ? 1 : ((b.ticket_price > a.ticket_price) ? -1 : 0))
+            return newState; 
             // [...cities, { name: cityWeather.name, weather: cityWeather.weather}]
           });
         })
       );
+      setIsLoading(false)
+    }
 
     selectedCity?.name && getDestinationsPrices()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -67,6 +81,6 @@ export const useCity = (selectedCity: any) => {
 
   return {
     cities,
-    // isLoading,
+    isLoading,
   } as CityHook;
 };
