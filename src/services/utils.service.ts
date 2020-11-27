@@ -54,9 +54,7 @@ export const capitalize = (str: string) =>
 export const clamp = (value: number, min: number, max: number) =>
   Math.min(Math.max(value, min), max);
 
-export const sortFunction = (a: any, b: any, field: string) => {
-  debugger
-  const x = (a[field] > b[field]) ? 1 : ((b[field] > a[field]) ? -1 : 0)
-  console.log(x)
-  return x
+export const sortFunction = (a: any, b: any, field: string, dir: string) => {
+  const sortResult = (a[field] > b[field]) ? 1 : ((b[field] > a[field]) ? -1 : 0)
+  return dir === 'desc' ? sortResult : sortResult * -1
 }

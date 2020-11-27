@@ -18,7 +18,7 @@ const Home = () => {
   const { cities, isLoading, sortCities } = useCity(selectedCity);
 
   const onChangeSort = (sortField: string) => {
-    sortCities(sortField);
+    sortCities(sortField.split('|')[0], sortField.split('|')[1] as "desc" | "asc");
   };
 
   const areResultsFetched = () => cities[0]?.price;
@@ -26,11 +26,11 @@ const Home = () => {
   const sortOptions = [
     {
       text: 'Weather',
-      value: 'feels_like',
+      value: 'feels_like|desc',
     },
     {
       text: 'Price',
-      value: 'price',
+      value: 'price|asc',
     },
   ] as DropdownItemProps[];
 

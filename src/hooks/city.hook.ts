@@ -7,11 +7,12 @@ import { kiwiAPI, weatherAPI } from 'services/api.service';
 import { sortFunction } from 'services/utils.service';
 import { useAPI } from './api.hook';
 import { useEffectSkipFirstRun } from './use-effect-skip-first.hook';
+import orderBy from 'lodash.orderby';
 
 export type CityHook = {
   cities: City[];
   isLoading: boolean;
-  sortCities: (field: string) => void;
+  sortCities: (field: string, direction: "desc" | "asc") => void;
 };
 
 export const useCity = (selectedCity: any) => {
@@ -19,16 +20,12 @@ export const useCity = (selectedCity: any) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   // const { isLoading, result, setUrl } = useAPI(ticketsAPI);
 
-  const sortCities = (field: string) => {
-    // console.log(cities)
-    // cities.sort((a, b) => sortFunction(a, b, field))
-    // console.log(cities)
-    setCities(prevCities => {
-      console.log(prevCities)
-      let sortedCities = prevCities.sort((a, b) => sortFunction(a, b, field))
-      console.log(sortedCities)
-      return sortedCities
-    })
+  const sortCities = (field: string, direction: "desc" | "asc") => {
+    console.log(cities)
+    // let sortedCities = cities.sort((a, b) => sortFunction(a, b, field, direction))
+    // orderBy(cities, field, [direction])
+
+    setCities(orderBy(cities, field, [direction]))
   }
 
   useEffect(() => {
@@ -76,7 +73,7 @@ export const useCity = (selectedCity: any) => {
                 return city;
               }
             })
-            .sort((a, b) => sortFunction(a, b, 'feels_like'))
+            debugger
             return newState; 
           });
         })
