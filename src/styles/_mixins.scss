@@ -1,0 +1,84 @@
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px
+) !default;
+
+@function breakpoint-next($name, $breakpoints: $grid-breakpoints, $breakpoint-names: map-keys($breakpoints)) {
+  $n: index($breakpoint-names, $name);
+  @return if($n < length($breakpoint-names), nth($breakpoint-names, $n + 1), null);
+}
+
+@function breakpoint-min($name, $breakpoints: $grid-breakpoints) {
+  $min: map-get($breakpoints, $name);
+  @return if($min != 0, $min, null);
+}
+
+@function breakpoint-max($name, $breakpoints: $grid-breakpoints) {
+  $next: breakpoint-next($name, $breakpoints);
+  @return if($next, breakpoint-min($next, $breakpoints) - .02px, null);
+}
+
+@mixin media-breakpoint-up($name, $breakpoints: $grid-breakpoints) {
+  $min: breakpoint-min($name, $breakpoints);
+  @if $min {
+    @media (min-width: $min) {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}
+
+@mixin media-breakpoint-down($name, $breakpoints: $grid-breakpoints) {
+  $max: breakpoint-max($name, $breakpoints);
+  @if $max {
+    @media (max-width: $max) {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}
+
+
+@mixin _container-grid($grid-margin-y, $grid-margin-x) {
+  display: grid;
+  grid-gap: $grid-margin-y $grid-margin-x;
+  grid-template-columns: 100%;
+  grid-auto-rows: 1fr;
+  width: 100%;
+  @include media-breakpoint-up(sm) {
+    grid-template-columns:
+      calc(50% - #{$grid-margin-x}/ 2)
+      calc(50% - #{$grid-margin-x}/ 2);
+  }
+  @include media-breakpoint-up(md) {
+    grid-template-columns:
+      calc(33.3% - #{$grid-margin-x} * 2 / 3)
+      calc(33.3% - #{$grid-margin-x} * 2 / 3)
+      calc(33.3% - #{$grid-margin-x} * 2 / 3);
+  }
+  @include media-breakpoint-up(lg) {
+    grid-template-columns:
+      calc(33.3% - #{$grid-margin-x} * 2 / 3)
+      calc(33.3% - #{$grid-margin-x} * 2 / 3)
+      calc(33.3% - #{$grid-margin-x} * 2 / 3);
+  }
+  @include media-breakpoint-up(xl) {
+    grid-template-columns:
+      calc(25% - #{$grid-margin-x} * 3 / 4)
+      calc(25% - #{$grid-margin-x} * 3 / 4)
+      calc(25% - #{$grid-margin-x} * 3 / 4)
+      calc(25% - #{$grid-margin-x} * 3 / 4);
+  }
+}
+
+@mixin _text-truncate-at-line($idx) {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: $idx;
+  -webkit-box-orient: vertical;
+}

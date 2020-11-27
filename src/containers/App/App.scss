@@ -1,0 +1,45 @@
+@import 'styles/_mixins';
+@import 'styles/_variables';
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.main-content {
+  min-height: 90vh;
+  padding: 0 16px 16px 16px;
+}
+
+.paginated-content {
+  min-height: 60vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sort {
+  order: 1;
+}
+
+.ui.card {
+  width: auto !important;
+  overflow: hidden;
+}
+
+.ui.button {
+  &:hover {
+    background-color: #94949e1f!important;
+  }
+}

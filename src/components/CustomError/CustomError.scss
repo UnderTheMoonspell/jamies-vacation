@@ -1,0 +1,16 @@
+@import 'styles/_variables';
+
+.custom-error {
+  color: $danger;
+  margin-top: 4px;
+
+  &.alert {
+    display: inline-block;
+    margin-top: 16px;
+
+    background-color: lighten($danger, 45%) !important; //TODO refactor to mixin
+    border-color: lighten($danger, 45%) !important;
+    border-radius: 6px;
+    padding: 4px 8px;
+  }
+}

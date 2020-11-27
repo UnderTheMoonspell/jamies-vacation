@@ -1,0 +1,17 @@
+.nav-bar {
+  display: flex;
+  padding: 16px;
+  align-items: center;
+  height: 10vh;
+
+  span {
+    margin: 0 8px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.navbar-logo {
+  width: 40px;
+}
