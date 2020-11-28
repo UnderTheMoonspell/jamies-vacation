@@ -1,4 +1,4 @@
-import { API } from './api.service'
+import { kiwiAPI as API } from './api.service'
 
 jest.mock('axios', () => {
   return {

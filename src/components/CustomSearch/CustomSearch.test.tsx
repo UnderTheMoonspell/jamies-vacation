@@ -1,32 +1,39 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import { Game } from 'components/CityItem/CityItem';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { CityItem } from 'components/CityItem/CityItem';
 import Config from 'config';
-import { GameModel } from 'models/Game';
+import { City } from 'models/City';
 import React from 'react';
-import { API } from 'services/api.service';
+import { kiwiAPI } from 'services/api.service';
 import { changeInput } from 'services/test.helpers';
 import { CustomSearch } from './CustomSearch';
 
-const gameResults = {
+const locationResults = {
   data: [
     {
       id: 1,
-      name: 'Kings of cash',
+      city: {
+        name: 'Lisbon',
+      },
     },
     {
-      id: 2,
-      name: 'Vikings',
-    }
+      id: 1,
+      city: {
+        name: 'Lisbotheum',
+      },
+    },
   ],
 };
 
+const clickHandler = jest.fn();
+
 it('CustomSearch', async () => {
-  API.get = jest.fn(() => Promise.resolve(gameResults)) as any;
+  kiwiAPI.get = jest.fn(() => Promise.resolve(locationResults)) as any;
 
   render(
     <CustomSearch
-      url={Config.endpoints.CASINO_GAMES_SEARCH}
-      renderedItem={(props: GameModel) => <Game {...props} />}
+      url={Config.endpoints.LOCATIONS}
+      renderedItem={(props: City) => <CityItem {...props} />}
+      clickHandler={clickHandler}
     />
   );
 
@@ -34,18 +41,19 @@ it('CustomSearch', async () => {
 
   expect(searchInput).toBeInTheDocument();
 
-  changeInput(searchInput, 'a');
+  changeInput(searchInput, 'Budapest');
 
   await waitFor(() => screen.queryByText('No results found'));
 
   expect(screen.getByText('No results found.')).toBeInTheDocument();
 
-  changeInput(searchInput, 'kin');
+  changeInput(searchInput, 'Lisbon');
 
-  await waitFor(() =>
-    expect(screen.queryByText('Kings of cash')).toBeInTheDocument()
-  );
-  expect(API.get).toHaveBeenCalledWith(
-    Config.endpoints.CASINO_GAMES_SEARCH(100, 'kin')
-  );
+  await waitFor(() => expect(screen.queryByText('Lisbon')).toBeInTheDocument());
+
+  expect(kiwiAPI.get).toHaveBeenCalledWith(Config.endpoints.LOCATIONS('Lisbon'));
+
+  fireEvent.click(screen.getByText('Lisbon'));
+
+  expect(clickHandler).toHaveBeenCalled();
 });

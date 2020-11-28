@@ -26,10 +26,7 @@ export const CustomSearch: React.FC<SearchComponentProps> = (props) => {
     const searchTerm = event.target.value || '';
     setSearchTerm(searchTerm);
     if (searchTerm.length < 3) return;
-    setUrl(props.url(searchTerm), 'get', {
-      'x-rapidapi-key': Config.geoDBAPIKey,
-      'x-rapidapi-host': Config.geoDBRapidHpst,
-    });
+    setUrl(props.url(searchTerm), 'get');
   };
 
   const canShowResults = () =>

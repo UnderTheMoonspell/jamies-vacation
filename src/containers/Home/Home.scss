@@ -1,4 +1,5 @@
 @import 'styles/_mixins';
+@import 'styles/_variables'; //TODO import globally
 
 .home {
   h1 {
@@ -7,9 +8,15 @@
     border-bottom: 1px solid gray;
     width: 50%;
     margin: 0 auto;
+    color: $primary;
 
     @include media-breakpoint-down(sm) {
+      width: 70%;
+    }
+
+    @include media-breakpoint-down(xs) {
       width: 95%;
+      line-height: 50px;
     }
   }
 

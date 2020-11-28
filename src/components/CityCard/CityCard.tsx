@@ -1,4 +1,3 @@
-import Config from 'config';
 import { City } from 'models/City';
 import React from 'react';
 import { Card, Image, Label } from 'semantic-ui-react';
@@ -20,7 +19,7 @@ export const CityCard: React.FC<CityCardProps> = (props) => {
       )}
       <Image
         className='city-image'
-        src={require(`../../../public/${props.city.name.toLowerCase()}.jpg`)}
+        src={require(`../../assets/${props.city.name.toLowerCase()}.jpg`)}
         wrapped
         ui={false}
       />

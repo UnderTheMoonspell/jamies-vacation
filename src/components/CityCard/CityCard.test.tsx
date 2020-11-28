@@ -13,9 +13,10 @@ const city = {
 it('Renders cityCard', () => {
   const { getByText } = render(
     <MemoryRouter>
-      <CityCard {...city} />
+      <CityCard city={city}  is_best={true}/>
     </MemoryRouter>
   );
 
   expect(getByText(city.name)).toBeInTheDocument();
+  expect(getByText("Best")).toBeInTheDocument();
 });

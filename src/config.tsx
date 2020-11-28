@@ -21,13 +21,11 @@ export default class Config {
   static weatherBaseUrl: string = `https://api.openweathermap.org/data/2.5`;
   static kiwiBaseURL: string = `https://api.skypicker.com`;
 
-  static imageMediaServer: string = 'https://media.dazzletag.com/';
-
   static geoDBAPIKey: string =
     'e4eb504fb1msh555eb5f9d12b8bdp190b61jsn65b06d4870d1';
   static geoDBRapidHpst: string = 'wft-geo-db.p.rapidapi.com';
 
-  static paginationItemsPerPage: number = 12;
+  static dateFormat = 'DD/MM/yyyy';
 
   static endpoints = {
     GET_WEATHER_BY_CITY: (city: string) =>

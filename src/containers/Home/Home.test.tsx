@@ -1,5 +1,5 @@
 import React from 'react';
-import News from './Home';
+import Home from './Home';
 import {
   cleanup,
   render,
@@ -7,7 +7,7 @@ import {
   fireEvent,
   screen,
 } from '@testing-library/react';
-import { API } from 'services/api.service';
+// import { API } from 'services/api.service';
 import { selectOption } from 'services/test.helpers';
 import Config from 'config';
 import { BrowserRouter } from 'react-router-dom';
@@ -64,10 +64,20 @@ const newsPage2 = {
   ],
 };
 
-describe('News', () => {
+describe('Home', () => {
   afterEach(cleanup);
 
-  it('Renders News', async () => {
+  it('Renders Home', async () => {
+    const { container } = render(
+      <BrowserRouter>
+        <Home />
+      </BrowserRouter>
+    );
+
+    expect(screen.getByText('Where are you flying from ?')).toBeInTheDocument();
+  })
+
+  it('Renders Home', async () => {
     API.get = jest.fn(() => Promise.resolve(newsPage1)) as any;
 
     const { container } = render(

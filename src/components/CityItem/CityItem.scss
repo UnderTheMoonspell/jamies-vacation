@@ -1,0 +1,17 @@
+@import 'styles/_mixins';
+
+.city-item {
+  position: relative;
+
+  .airport {
+    font-size: 10px;
+    display: block;
+    @include _text-truncate-at-line(1);
+  }
+
+  i {
+    position: absolute;
+    right: 0;
+    top: 6px;
+  }
+}

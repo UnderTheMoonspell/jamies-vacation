@@ -1,40 +1,33 @@
 import Config from 'config';
-import { AnyARecord } from 'dns';
+import orderBy from 'lodash.orderby';
 import { City } from 'models/City';
 import { Weather } from 'models/Weather';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { kiwiAPI, weatherAPI } from 'services/api.service';
-import { sortFunction } from 'services/utils.service';
-import { useAPI } from './api.hook';
-import { useEffectSkipFirstRun } from './use-effect-skip-first.hook';
-import orderBy from 'lodash.orderby';
+import moment from 'moment';
 
 export type CityHook = {
   cities: City[];
   isLoading: boolean;
-  sortCities: (field: string, direction: "desc" | "asc") => void;
+  sortCities: (field: string, direction: string) => void;
 };
 
 export const useCity = (selectedCity: any) => {
   const [cities, setCities] = useState<City[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  // const { isLoading, result, setUrl } = useAPI(ticketsAPI);
 
-  const sortCities = (field: string, direction: "desc" | "asc") => {
-    console.log(cities)
-    // let sortedCities = cities.sort((a, b) => sortFunction(a, b, field, direction))
-    // orderBy(cities, field, [direction])
-
-    setCities(orderBy(cities, field, [direction]))
+  const sortCities = (field: string, direction: string) => {
+    debugger
+    setCities(orderBy(cities, field.split(','), direction.split(',') as ("asc" | "desc")[] ))
   }
 
   useEffect(() => {
     const getDestinationsWeather = async () =>
       await Promise.all(
         Config.destinations.map(async (city) => {
-          //rework apiHook to accept consecutive updates
+          //TODO rework apiHook to accept consecutive updates
           let cityWeather = await weatherAPI.get(
-            Config.endpoints.GET_WEATHER_BY_CITY(city.name) //Types for given cities
+            Config.endpoints.GET_WEATHER_BY_CITY(city.name) //TODO Types for destination cities
           );
           setCities((cities) => [
             ...cities,
@@ -56,15 +49,17 @@ export const useCity = (selectedCity: any) => {
   }, []);
 
   useEffect(() => {
-    debugger;
     const getDestinationsPrices = async () => {
       setIsLoading(true)
       await Promise.all(
         Config.destinations.map(async (availableCities) => {
           let ticketInfo = await kiwiAPI.get(
-            Config.endpoints.GET_TICKET_INFO(selectedCity.code, availableCities.code, '23/12/2020', '31/12/2022')
+            Config.endpoints.GET_TICKET_INFO(selectedCity.code, 
+              availableCities.code, 
+              moment(new Date()).format(Config.dateFormat), 
+              moment(new Date()).add({days: 1}).format(Config.dateFormat)) //TODO add date as inputs
           );
-          setCities((cities) => {
+          ticketInfo.data.length && setCities((cities) => {
             //TODO this could be normalized, the property access would be much more immediate
             const newState = cities.map((city) => {
               if (city.name === availableCities.name) {
@@ -73,8 +68,7 @@ export const useCity = (selectedCity: any) => {
                 return city;
               }
             })
-            debugger
-            return newState; 
+            return orderBy(newState, 'price', 'asc'); 
           });
         })
       );
@@ -84,11 +78,6 @@ export const useCity = (selectedCity: any) => {
     selectedCity?.name && getDestinationsPrices()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCity]);
-
-  // useEffectSkipFirstRun(() => {
-  //   debugger
-  //   result && setCities(cities => [...cities, { name: result.name, weather: result.weather}])
-  // }, [result])
 
   return {
     cities,
