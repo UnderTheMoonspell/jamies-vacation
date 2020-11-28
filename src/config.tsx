@@ -1,5 +1,3 @@
-import { formattedDate } from 'services/utils.service';
-
 const OpenWeatherAPIKeyQS: string = `&appid=f0e307920b21ae38564d922c31d05753`;
 
 export default class Config {

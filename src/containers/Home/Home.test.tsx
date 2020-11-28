@@ -11,6 +11,7 @@ import {
 import { selectOption } from 'services/test.helpers';
 import Config from 'config';
 import { BrowserRouter } from 'react-router-dom';
+import { kiwiAPI as API} from 'services/api.service';
 
 const newsPage1 = {
   total: 30,
@@ -82,7 +83,7 @@ describe('Home', () => {
 
     const { container } = render(
       <BrowserRouter>
-        <News />
+        <Home />
       </BrowserRouter>
     );
 
@@ -104,7 +105,7 @@ describe('Home', () => {
 
     const { container } = render(
       <BrowserRouter>
-        <News />
+        <Home />
       </BrowserRouter>
     );
 
