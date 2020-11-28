@@ -16,75 +16,83 @@ type SearchComponentProps = {
   clickHandler: (searchResult: any) => void; //TODO type,
 };
 
-// TODO clear button in this component or checking the click event and hide the results if 
+// TODO clear button in this component or checking the click event and hide the results if
 // target outside the dropdownlist
 
-export const CustomSearch: React.FC<SearchComponentProps> = React.memo((props) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const { isLoading, result, setUrl } = useAPI(kiwiAPI);
+export const CustomSearch: React.FC<SearchComponentProps> = React.memo(
+  (props) => {
+    const [searchTerm, setSearchTerm] = useState('');
+    const { isLoading, result, setUrl } = useAPI(kiwiAPI);
 
-  const handleSearchChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const searchTerm = event.target.value || '';
-    setSearchTerm(searchTerm);
-    if (searchTerm.length < 3) return;
-    setUrl(props.url(searchTerm), 'get');
-  };
+    const handleSearchChange = async (
+      event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+      const searchTerm = event.target.value || '';
+      setSearchTerm(searchTerm);
+      if (searchTerm.length < 3) return;
+      setUrl(props.url(searchTerm), 'get');
+    };
 
-  const canShowResults = () =>
-    (result &&
-    result.locations?.length > 1 &&
-    searchTerm.length >= 3) ||
-    (result && result.locations?.length === 1 
-      && Config.destinations.findIndex(destination => destination.name === result.locations[0].city.name) < 0);
+    const canShowResults = () =>
+      (result && result.locations?.length > 1 && searchTerm.length >= 3) ||
+      (result &&
+        result.locations?.length === 1 &&
+        Config.destinations.findIndex(
+          (destination) => destination.name === result.locations[0].city.name
+        ) < 0);
 
-
-  const getFilteredResults = (): any[] => {
+    const getFilteredResults = (): any[] => {
       return result.locations.filter(
-        (city: any) => Config.destinations.findIndex(destination => destination.name === city.city.name) < 0
+        (city: any) =>
+          Config.destinations.findIndex(
+            (destination) => destination.name === city.city.name
+          ) < 0
       ) as any[];
-  };
-  // Do not show the destinations
+    };
+    // Do not show the destinations
 
-  const clickItem = (searchResult: any) => {
-    props.clickHandler(searchResult);
-    setSearchTerm('');
-  };
+    const clickItem = (searchResult: any) => {
+      props.clickHandler(searchResult);
+      setSearchTerm('');
+    };
 
-  return (
-    <div className={`ui search ${isLoading && 'loading'}`}>
-      <div className='ui icon input'>
-        <input
-          auto-complete='off'
-          type='text'
-          tab-index='0'
-          className='prompt'
-          value={searchTerm}
-          onChange={handleSearchChange}
-          data-testid='search-input'
-        />
-        <i aria-hidden='true' className='search icon'></i>
-      </div>
-      <div className={`results transition ${!!searchTerm.length && 'visible'}`}>
-        {canShowResults() ? (
-          getFilteredResults().map((searchResult: any) => (
-            <div
-              className='result'
-              key={searchResult.id}
-              onClick={(e: React.MouseEvent<HTMLInputElement>) =>
-                clickItem(searchResult)
-              }
-            >
-              <props.renderedItem {...searchResult} />
+    return (
+      <div className={`ui search ${isLoading && 'loading'}`}>
+        <div className='ui icon input'>
+          <input
+            auto-complete='off'
+            type='text'
+            tab-index='0'
+            className='prompt'
+            value={searchTerm}
+            onChange={handleSearchChange}
+            data-testid='search-input'
+          />
+          <i aria-hidden='true' className='search icon'></i>
+        </div>
+        <div
+          className={`results transition ${!!searchTerm.length && 'visible'}`}
+          data-testid='results-container'
+        >
+          {canShowResults() ? (
+            getFilteredResults().map((searchResult: any) => (
+              <div
+                className='result'
+                key={searchResult.id}
+                onClick={(e: React.MouseEvent<HTMLInputElement>) =>
+                  clickItem(searchResult)
+                }
+              >
+                <props.renderedItem {...searchResult} />
+              </div>
+            ))
+          ) : (
+            <div className='message empty'>
+              <div className='header'>No results found.</div>
             </div>
-          ))
-        ) : (
-          <div className='message empty'>
-            <div className='header'>No results found.</div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
-    </div>
-  );
-});
+    );
+  }
+);

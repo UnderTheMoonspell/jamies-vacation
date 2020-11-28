@@ -1,4 +1,10 @@
-import { findByText, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  findByText,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import { CityItem } from 'components/CityItem/CityItem';
 import Config from 'config';
 import { City } from 'models/City';
@@ -18,7 +24,7 @@ const locationResults = {
     {
       id: 2,
       city: {
-        name: 'Lisbotheum',
+        name: 'Lisbonatheum',
       },
     },
   ],
@@ -49,8 +55,15 @@ fit('CustomSearch', async () => {
 
   changeInput(searchInput, 'Lisbon');
   await waitFor(() => expect(screen.queryByText('Lisbon')).toBeInTheDocument());
-  expect(kiwiAPI.get).toHaveBeenCalledWith(Config.endpoints.LOCATIONS('Lisbon'));
+  expect(kiwiAPI.get).toHaveBeenCalledWith(
+    Config.endpoints.LOCATIONS('Lisbon')
+  );
 
+  const resultContainer = screen.getByTestId(
+    'results-container'
+  ) as HTMLElement;
+
+  expect(resultContainer.childElementCount).toBe(2);
   fireEvent.click(screen.getByText('Lisbon'));
 
   expect(clickHandler).toHaveBeenCalled();
