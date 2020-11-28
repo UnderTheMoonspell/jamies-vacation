@@ -39,11 +39,13 @@ export const CustomSearch: React.FC<SearchComponentProps> = React.memo((props) =
     (result && result.locations?.length === 1 
       && Config.destinations.findIndex(destination => destination.name === result.locations[0].city.name) < 0);
 
+
   const getFilteredResults = (): any[] => {
       return result.locations.filter(
         (city: any) => Config.destinations.findIndex(destination => destination.name === city.city.name) < 0
       ) as any[];
   };
+  // Do not show the destinations
 
   const clickItem = (searchResult: any) => {
     props.clickHandler(searchResult);

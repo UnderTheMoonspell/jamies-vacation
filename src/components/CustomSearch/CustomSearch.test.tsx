@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { findByText, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { CityItem } from 'components/CityItem/CityItem';
 import Config from 'config';
 import { City } from 'models/City';
@@ -8,7 +8,7 @@ import { changeInput } from 'services/test.helpers';
 import { CustomSearch } from './CustomSearch';
 
 const locationResults = {
-  data: [
+  locations: [
     {
       id: 1,
       city: {
@@ -16,7 +16,7 @@ const locationResults = {
       },
     },
     {
-      id: 1,
+      id: 2,
       city: {
         name: 'Lisbotheum',
       },
@@ -26,7 +26,7 @@ const locationResults = {
 
 const clickHandler = jest.fn();
 
-it('CustomSearch', async () => {
+fit('CustomSearch', async () => {
   kiwiAPI.get = jest.fn(() => Promise.resolve(locationResults)) as any;
 
   render(
@@ -41,16 +41,14 @@ it('CustomSearch', async () => {
 
   expect(searchInput).toBeInTheDocument();
 
-  changeInput(searchInput, 'Budapest');
+  changeInput(searchInput, 'Bu');
 
   await waitFor(() => screen.queryByText('No results found'));
-
+  expect(kiwiAPI.get).not.toHaveBeenCalled();
   expect(screen.getByText('No results found.')).toBeInTheDocument();
 
   changeInput(searchInput, 'Lisbon');
-
   await waitFor(() => expect(screen.queryByText('Lisbon')).toBeInTheDocument());
-
   expect(kiwiAPI.get).toHaveBeenCalledWith(Config.endpoints.LOCATIONS('Lisbon'));
 
   fireEvent.click(screen.getByText('Lisbon'));
