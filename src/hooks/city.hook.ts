@@ -16,7 +16,7 @@ export const useCity = (selectedCity: any) => {
   const [cities, setCities] = useState<City[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const sortCities = (field: string, direction: string) =>
+  const sortCities = (field: string, direction: string) => 
     setCities(orderBy(cities,field.split(','),direction.split(',') as ('asc' | 'desc')[]));
 
   const getCityWeather = async (city: City) => {

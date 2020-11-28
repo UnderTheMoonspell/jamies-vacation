@@ -1,8 +1,19 @@
-import { render, screen } from "@testing-library/react";
-import React from "react";
+import { render, screen } from '@testing-library/react';
+import React from 'react';
+import { CityItem } from './CityItem';
 
-it("Renders Game", () => {
-//   render(<Game />);
+const props = {
+  name: 'Portela Aiport',
+  city: {
+    name: 'Lisbon',
+    country: {
+      code: 'pt',
+    },
+  },
+};
 
-//   expect(screen.getByText("Loading...")).toBeInTheDocument();
+it('Renders CityItem', () => {
+  render(<CityItem {...props} />);
+
+  expect(screen.getByText('Portela Aiport')).toBeInTheDocument();
 });

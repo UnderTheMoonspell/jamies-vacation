@@ -1,7 +1,6 @@
 import { City } from 'models/City';
 import React from 'react';
 import { Card, Image, Label } from 'semantic-ui-react';
-import { StandardDate } from '../../filters/StandardDate/StandardDate';
 import './CityCard.scss';
 
 export type CityCardProps = {
@@ -26,9 +25,6 @@ export const CityCard: React.FC<CityCardProps> = (props) => {
       <Card.Content>
         <Card.Header>{props.city.name}</Card.Header>
         <Card.Meta>
-          {/* <span className='date'>
-            <StandardDate date={props.city.start_date} />
-          </span> */}
         </Card.Meta>
         <Card.Description>
           <img
@@ -37,10 +33,10 @@ export const CityCard: React.FC<CityCardProps> = (props) => {
             className='weather-icon'
           ></img>
           <div className="weather-info">
-            <span>Temperature: {props.city.weather?.temp} º</span>
+            <span data-testid="temperature">Temperature: {props.city.weather?.temp} º</span>
             <span>Humidity: {props.city.weather?.humidity} %</span>
           </div>
-          <span className="price-info">{props.city.price}€</span>
+          <span className="price-info" data-testid="price">{props.city.price}€</span>
         </Card.Description>
       </Card.Content>
     </Card>

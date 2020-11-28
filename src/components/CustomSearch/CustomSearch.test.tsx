@@ -1,5 +1,4 @@
 import {
-  findByText,
   fireEvent,
   render,
   screen,
