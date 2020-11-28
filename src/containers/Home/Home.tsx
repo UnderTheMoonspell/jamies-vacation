@@ -1,7 +1,7 @@
 import { CustomLoader } from 'components/CustomLoader/CustomLoader';
 import { CustomSort } from 'components/CustomSort/CustomSort';
 import Config from 'config';
-import React, { useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { DropdownItemProps } from 'semantic-ui-react';
 import './Home.scss';
 import { useCity } from 'hooks/city.hook';
@@ -15,10 +15,23 @@ const Home = () => {
   const { cities, isLoading, sortCities } = useCity(selectedCity);
 
   const onChangeSort = (sortField: string) => {
-    sortCities(sortField.split('|')[0], sortField.split('|')[1] as "desc" | "asc");
+    sortCities(
+      sortField.split('|')[0],
+      sortField.split('|')[1] as 'desc' | 'asc'
+    );
   };
 
-  const areResultsFetched = () => cities[0]?.price;
+  const onSearchSelect = useCallback(
+    (targetCity) => setSelectedCity((prevCity) => targetCity),
+    []
+  );
+
+  const renderSearchItem = useCallback(
+    (props: any) => <CityItem {...props} />,
+    []
+  );
+
+  const areResultsFetched = useMemo(() => cities[0]?.price, [cities]);
 
   const sortOptions = [
     {
@@ -46,14 +59,14 @@ const Home = () => {
       <h3>Where are you flying from ?</h3>
       <CustomSearch
         url={Config.endpoints.LOCATIONS}
-        renderedItem={(props: any) => <CityItem {...props} />}
-        clickHandler={setSelectedCity}
+        renderedItem={renderSearchItem}
+        clickHandler={onSearchSelect}
       />
       {isLoading ? (
         <CustomLoader />
       ) : (
-        <>
-          {areResultsFetched() && (
+        areResultsFetched && (
+          <>
             <CustomSort
               name='city-sort'
               placeholder='Sort By'
@@ -61,11 +74,9 @@ const Home = () => {
               onSortFieldChange={onChangeSort}
               data-testid='city-sort'
             />
-          )}
-          <div className='results-container'>
-            {areResultsFetched() && getCitiesInfo()}
-          </div>
-        </>
+            <div className='results-container'>{getCitiesInfo()}</div>
+          </>
+        )
       )}
     </div>
   );

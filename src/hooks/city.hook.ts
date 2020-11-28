@@ -19,33 +19,6 @@ export const useCity = (selectedCity: any) => {
   const sortCities = (field: string, direction: string) =>
     setCities(orderBy(cities,field.split(','),direction.split(',') as ('asc' | 'desc')[]));
 
-  const getPriceInfo = async (destination: any) => {
-    let ticketInfo = await kiwiAPI.get(
-      Config.endpoints.GET_TICKET_INFO(
-        selectedCity.code,
-        destination.code,
-        moment(new Date()).format(Config.dateFormat),
-        moment(new Date()).add({ days: 1 }).format(Config.dateFormat)
-      ) //TODO add date as inputs
-    );
-    ticketInfo.data.length &&
-      setCities((cities) => {
-        //TODO this could be normalized, the property access would be much more immediate
-        const newState = cities.map((city) => {
-          if (city.name === destination.name) {
-            return {
-              ...city,
-              id: ticketInfo.data[0].id,
-              price: ticketInfo.data[0].price,
-            };
-          } else {
-            return city;
-          }
-        });
-        return orderBy(newState, 'price', 'asc');
-      });
-  };
-
   const getCityWeather = async (city: City) => {
     //TODO rework apiHook to accept consecutive updates
     let cityWeather = await weatherAPI.get(
@@ -59,7 +32,7 @@ export const useCity = (selectedCity: any) => {
         weather: {
           icon: cityWeather.weather[0].icon,
           humidity: cityWeather.main.humidity,
-          temp: cityWeather.main.temp,
+          temp: cityWeather.main.temp.toFixed(1),
         } as Weather,
       } as City,
     ]);
@@ -74,6 +47,33 @@ export const useCity = (selectedCity: any) => {
   }, []);
 
   useEffect(() => {
+    const getPriceInfo = async (destination: any) => {
+      let ticketInfo = await kiwiAPI.get(
+        Config.endpoints.GET_TICKET_INFO(
+          selectedCity.code,
+          destination.code,
+          moment(new Date()).format(Config.dateFormat),
+          moment(new Date()).add({ days: 1 }).format(Config.dateFormat)
+        ) //TODO add date as inputs
+      );
+      ticketInfo.data.length &&
+        setCities((cities) => {
+          //TODO this could be normalized, the property access would be much more immediate
+          const newState = cities.map((city) => {
+            if (city.name === destination.name) {
+              return {
+                ...city,
+                id: ticketInfo.data[0].id,
+                price: ticketInfo.data[0].price,
+              };
+            } else {
+              return city;
+            }
+          });
+          return orderBy(newState, 'price', 'asc');
+        });
+    };
+
     const getDestinationsPrices = async () => {
       setIsLoading(true);
       await Promise.all(Config.destinations.map(getPriceInfo));
@@ -81,7 +81,6 @@ export const useCity = (selectedCity: any) => {
     };
 
     selectedCity?.name && getDestinationsPrices();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCity]);
 
   return {

@@ -16,7 +16,10 @@ type SearchComponentProps = {
   clickHandler: (searchResult: any) => void; //TODO type,
 };
 
-export const CustomSearch: React.FC<SearchComponentProps> = (props) => {
+// TODO clear button in this component or checking the click event and hide the results if 
+// target outside the dropdownlist
+
+export const CustomSearch: React.FC<SearchComponentProps> = React.memo((props) => {
   const [searchTerm, setSearchTerm] = useState('');
   const { isLoading, result, setUrl } = useAPI(kiwiAPI);
 
@@ -82,4 +85,4 @@ export const CustomSearch: React.FC<SearchComponentProps> = (props) => {
       </div>
     </div>
   );
-};
+});
