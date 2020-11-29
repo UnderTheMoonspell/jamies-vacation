@@ -12,26 +12,9 @@ import { CityCard } from 'components/CityCard/CityCard';
 
 const Home = () => {
   const [selectedCity, setSelectedCity] = useState();
-  const { cities, isLoading, sortCities } = useCity(selectedCity);
-
-  const onChangeSort = (sortField: string) => {
-    sortCities(
-      sortField.split('|')[0],
-      sortField.split('|')[1] as 'desc' | 'asc'
-    );
-  };
-
-  const onSearchSelect = useCallback(
-    (targetCity) => setSelectedCity((prevCity) => targetCity),
-    []
+  const { cities, isLoading, sortCities, finishedFetching } = useCity(
+    selectedCity
   );
-
-  const renderSearchItem = useCallback(
-    (props: any) => <CityItem {...props} />,
-    []
-  );
-
-  const areResultsFetched = useMemo(() => cities[0]?.price, [cities]);
 
   const sortOptions = [
     {
@@ -48,24 +31,43 @@ const Home = () => {
     },
   ] as DropdownItemProps[];
 
-  const getCitiesInfo = useMemo(() =>
-    cities.map((city: City, idx: number) => (
-      <CityCard key={city.id} city={city} is_best={!idx} />
-    )), [cities]);
+  const onSearchSelect = useCallback(
+    (targetCity) => setSelectedCity((prevCity) => targetCity),
+    []
+  );
 
-  return (
-    <div className='home'>
-      <h1>Going back to office planner</h1>
-      <h3>Where are you flying from ?</h3>
-      <CustomSearch
-        url={Config.endpoints.LOCATIONS}
-        renderedItem={renderSearchItem}
-        clickHandler={onSearchSelect}
-      />
-      {isLoading ? (
-        <CustomLoader />
-      ) : (
-        areResultsFetched && (
+  const renderSearchItem = useCallback(
+    (props: any) => <CityItem {...props} />,
+    []
+  );
+
+  const noAvailableFlights = useMemo(
+    () => !cities.reduce((acc: number, city: City) => (acc += city.price), 0),
+    [cities]
+  );
+
+  const getCitiesInfo = useMemo(
+    () =>
+      cities.map((city: City, idx: number) => (
+        <CityCard key={city.id} city={city} is_best={!idx} />
+      )),
+    [cities]
+  );
+
+  const onChangeSort = useCallback(
+    (sortField: string) => {
+      sortCities(
+        sortField.split('|')[0],
+        sortField.split('|')[1] as 'desc' | 'asc'
+      );
+    },
+    [sortCities]
+  );
+
+  const displayResults = useMemo(() => {
+    if (finishedFetching) {
+      if (!noAvailableFlights) {
+        return (
           <>
             <CustomSort
               name='city-sort'
@@ -76,8 +78,33 @@ const Home = () => {
             />
             <div className='results-container'>{getCitiesInfo}</div>
           </>
-        )
-      )}
+        );
+      } else {
+        return (
+          <div className='empty-results'>
+            No flights from the chosen destination
+          </div>
+        );
+      }
+    }
+  }, [
+    finishedFetching,
+    getCitiesInfo,
+    noAvailableFlights,
+    onChangeSort,
+    sortOptions,
+  ]);
+
+  return (
+    <div className='home'>
+      <h1>Going back to office planner</h1>
+      <h3>Where are you flying from ?</h3>
+      <CustomSearch
+        url={Config.endpoints.LOCATIONS}
+        renderedItem={renderSearchItem}
+        clickHandler={onSearchSelect}
+      />
+      {isLoading ? <CustomLoader /> : displayResults}
     </div>
   );
 };

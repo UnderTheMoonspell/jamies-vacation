@@ -3,14 +3,17 @@ const OpenWeatherAPIKeyQS: string = `&appid=f0e307920b21ae38564d922c31d05753`;
 export default class Config {
   static destinations: any[] = [
     {
+      id: 1,
       name: 'Amsterdam',
       code: 'AMS',
     },
     {
+      id: 2,
       name: 'Madrid',
       code: 'MAD',
     },
     {
+      id: 3,
       name: 'Budapest',
       code: 'BUD',
     },

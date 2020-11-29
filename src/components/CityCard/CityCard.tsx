@@ -10,7 +10,7 @@ export type CityCardProps = {
 
 export const CityCard: React.FC<CityCardProps> = (props) => {
   return (
-    <Card className='city-card'>
+    <Card className={`city-card ${props.is_best && 'is-best'}`}>
       {props.is_best && (
         <Label color={'red'} ribbon>
           Best

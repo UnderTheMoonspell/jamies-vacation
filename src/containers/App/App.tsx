@@ -3,6 +3,7 @@ import './App.scss';
 import { Route, Switch } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 const Home = React.lazy(() => import('containers/Home/Home'));
+// Lazy loading in such a small app doesnt bring any major improvement
 
 function App() {
   return (

@@ -1,7 +1,13 @@
 import React from 'react';
 import Home from './Home';
 import { when } from 'jest-when';
-import { render, waitFor, fireEvent, screen } from '@testing-library/react';
+import {
+  render,
+  waitFor,
+  fireEvent,
+  screen,
+  waitForElementToBeRemoved,
+} from '@testing-library/react';
 import { changeInput, selectOption } from 'services/test.helpers';
 import Config from 'config';
 import { BrowserRouter } from 'react-router-dom';
@@ -124,8 +130,10 @@ describe('Home', () => {
       .calledWith(Config.endpoints.GET_WEATHER_BY_CITY('Budapest'))
       .mockReturnValue(weatherDataBudapest);
 
+    let container: any;
+
     await act(async () => {
-      render(
+      container = render(
         <BrowserRouter>
           <Home />
         </BrowserRouter>
@@ -149,7 +157,7 @@ describe('Home', () => {
           moment(new Date()).add({ days: 1 }).format(Config.dateFormat)
         )
       )
-      .mockReturnValue(flightTicketAmsterdamData);
+      .mockReturnValueOnce(flightTicketAmsterdamData);
 
     when(kiwiAPI.get as any)
       .calledWith(
@@ -160,7 +168,7 @@ describe('Home', () => {
           moment(new Date()).add({ days: 1 }).format(Config.dateFormat)
         )
       )
-      .mockReturnValue(flightTicketMadridData);
+      .mockReturnValueOnce(flightTicketMadridData);
 
     when(kiwiAPI.get as any)
       .calledWith(
@@ -171,7 +179,7 @@ describe('Home', () => {
           moment(new Date()).add({ days: 1 }).format(Config.dateFormat)
         )
       )
-      .mockReturnValue(flightTicketBudapestData);
+      .mockReturnValueOnce(flightTicketBudapestData);
 
     const searchInput = screen.getByTestId('search-input') as HTMLInputElement;
 
@@ -215,5 +223,57 @@ describe('Home', () => {
 
     expect(sortedPrices[2].textContent).toBe('200€');
     expect(sortedTemperatures[2].textContent).toBe('Temperature: 1.2 º');
+
+    // EMPTY VALUES
+
+    when(kiwiAPI.get as any)
+      .calledWith(Config.endpoints.LOCATIONS('Lisbonatheum'))
+      .mockReturnValue(airportData);
+
+    changeInput(searchInput, 'Lisbonatheum');
+    await waitFor(() =>
+      expect(screen.queryByText('Lisbonatheum')).toBeInTheDocument()
+    );
+
+    when(kiwiAPI.get as any)
+      .calledWith(
+        Config.endpoints.GET_TICKET_INFO(
+          'LIS',
+          'AMS',
+          moment(new Date()).format(Config.dateFormat),
+          moment(new Date()).add({ days: 1 }).format(Config.dateFormat)
+        )
+      )
+      .mockReturnValueOnce({ data: [] });
+
+    when(kiwiAPI.get as any)
+      .calledWith(
+        Config.endpoints.GET_TICKET_INFO(
+          'LIS',
+          'MAD',
+          moment(new Date()).format(Config.dateFormat),
+          moment(new Date()).add({ days: 1 }).format(Config.dateFormat)
+        )
+      )
+      .mockReturnValueOnce({ data: [] });
+
+    when(kiwiAPI.get as any)
+      .calledWith(
+        Config.endpoints.GET_TICKET_INFO(
+          'LIS',
+          'BUD',
+          moment(new Date()).format(Config.dateFormat),
+          moment(new Date()).add({ days: 1 }).format(Config.dateFormat)
+        )
+      )
+      .mockReturnValueOnce({ data: [] });
+
+    fireEvent.click(screen.getByText('Lisbonatheum'));
+
+    await waitFor(() =>
+      expect(
+        screen.getByText('No flights from the chosen destination')
+      ).toBeInTheDocument()
+    );
   });
 });

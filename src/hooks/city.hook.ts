@@ -9,25 +9,33 @@ import moment from 'moment';
 export type CityHook = {
   cities: City[];
   isLoading: boolean;
+  finishedFetching: boolean;
   sortCities: (field: string, direction: string) => void;
 };
 
 export const useCity = (selectedCity: any) => {
   const [cities, setCities] = useState<City[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [finishedFetching, setFinishedFetching] = useState<boolean>(false);
 
-  const sortCities = (field: string, direction: string) => 
-    setCities(orderBy(cities,field.split(','),direction.split(',') as ('asc' | 'desc')[]));
+  const sortCities = (field: string, direction: string) =>
+    setCities(
+      orderBy(
+        cities,
+        field.split(','),
+        direction.split(',') as ('asc' | 'desc')[]
+      )
+    );
 
-  const getCityWeather = async (city: City) => {
+  const getCityWeather = async (destination: any) => {
     //TODO rework apiHook to accept consecutive updates
     let cityWeather = await weatherAPI.get(
-      Config.endpoints.GET_WEATHER_BY_CITY(city.name) //TODO Types for destination cities
+      Config.endpoints.GET_WEATHER_BY_CITY(destination.name) //TODO Types for destination cities
     );
     setCities((cities) => [
       ...cities,
       {
-        name: city.name,
+        ...destination,
         feels_like: cityWeather.main.feels_like,
         weather: {
           icon: cityWeather.weather[0].icon,
@@ -47,7 +55,8 @@ export const useCity = (selectedCity: any) => {
 
   useEffect(() => {
     const getPriceInfo = async (destination: any) => {
-      let ticketInfo = await kiwiAPI.get(
+      setFinishedFetching(false);
+      const ticketInfo = await kiwiAPI.get(
         Config.endpoints.GET_TICKET_INFO(
           selectedCity.code,
           destination.code,
@@ -62,7 +71,6 @@ export const useCity = (selectedCity: any) => {
             if (city.name === destination.name) {
               return {
                 ...city,
-                id: ticketInfo.data[0].id,
                 price: ticketInfo.data[0].price,
               };
             } else {
@@ -71,9 +79,11 @@ export const useCity = (selectedCity: any) => {
           });
           return orderBy(newState, 'price', 'asc');
         });
+      setFinishedFetching(true);
     };
 
     const getDestinationsPrices = async () => {
+      setCities(prevCities => prevCities.map(city => ({...city, price: 0})))
       setIsLoading(true);
       await Promise.all(Config.destinations.map(getPriceInfo));
       setIsLoading(false);
@@ -86,5 +96,6 @@ export const useCity = (selectedCity: any) => {
     cities,
     isLoading,
     sortCities,
+    finishedFetching,
   } as CityHook;
 };

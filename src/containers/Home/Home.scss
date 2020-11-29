@@ -28,4 +28,11 @@
     margin-top: 24px;
     @include _container-grid(16px, 16px);
   }
+
+  .empty-results {
+    height: 30vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
