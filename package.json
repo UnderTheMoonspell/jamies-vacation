@@ -1,4 +1,5 @@
 {
+  "homepage": "http://UnderTheMoonspell.github.io/jamies-vacation",
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
@@ -21,7 +22,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
     "test:simple": "npm test -- --watchAll=false",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "jest": {
     "resetMocks": true
@@ -52,6 +55,7 @@
     "@types/react-dom": "^16.9.8",
     "@types/react-router": "^5.1.8",
     "@types/react-router-dom": "^5.1.6",
+    "gh-pages": "^3.1.0",
     "jest-environment-jsdom-sixteen": "^1.0.3",
     "jest-when": "^3.0.1",
     "node-sass": "^4.14.1",

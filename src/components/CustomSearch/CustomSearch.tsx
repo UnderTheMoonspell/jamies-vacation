@@ -1,6 +1,6 @@
 import Config from 'config';
 import { useAPI } from 'hooks/api.hook';
-import React, { ReactElement, useMemo, useState } from 'react';
+import React, { ReactElement, useEffect, useMemo, useState } from 'react';
 import { kiwiAPI } from 'services/api.service';
 import { CityItem } from '../CityItem/CityItem';
 
@@ -16,24 +16,23 @@ type SearchComponentProps = {
   clickHandler: (searchResult: any) => void; //TODO type,
 };
 
-// TODO clear button in this component or checking the click event and hide the results if
-// target outside the dropdownlist
-
 export const CustomSearch: React.FC<SearchComponentProps> = React.memo(
   (props) => {
     const [searchTerm, setSearchTerm] = useState('');
+    const [isResultContainerOpen, setResultContainerOpen] = useState(false);
     const { isLoading, result, setUrl } = useAPI(kiwiAPI);
 
     const handleSearchChange = async (
       event: React.ChangeEvent<HTMLInputElement>
     ) => {
+      setResultContainerOpen(true);
       const searchTerm = event.target.value || '';
       setSearchTerm(searchTerm);
       if (searchTerm.length < 3) return;
       setUrl(props.url(searchTerm), 'get');
     };
 
-
+    // Has results to show
     const canShowResults = useMemo(() => {
       return (result?.length > 1 && searchTerm.length >= 3) ||
       (result?.length === 1 &&
@@ -57,6 +56,22 @@ export const CustomSearch: React.FC<SearchComponentProps> = React.memo(
       setSearchTerm('');
     };
 
+    const areResultsVisible = () => searchTerm.length && isResultContainerOpen
+
+    const onInputFocus = () => setResultContainerOpen(true)
+
+    useEffect(() => {
+      const checkIfClickOutside = (e: any) => {
+        if(e.target.contains(document.getElementsByClassName('results')[0])) {
+          setResultContainerOpen(false)
+        }
+      }
+
+      window.addEventListener('click', checkIfClickOutside)
+
+      return (() => window.removeEventListener('click', checkIfClickOutside))
+    }, [])
+
     return (
       <div className={`ui search ${isLoading && 'loading'}`}>
         <div className='ui icon input'>
@@ -67,12 +82,13 @@ export const CustomSearch: React.FC<SearchComponentProps> = React.memo(
             className='prompt'
             value={searchTerm}
             onChange={handleSearchChange}
+            onFocus={onInputFocus}
             data-testid='search-input'
           />
           <i aria-hidden='true' className='search icon'></i>
         </div>
         <div
-          className={`results transition ${!!searchTerm.length && 'visible'}`}
+          className={`results transition ${areResultsVisible() && 'visible'}`}
           data-testid='results-container'
         >
           {canShowResults ? (
