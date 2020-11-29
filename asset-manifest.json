@@ -1,0 +1,36 @@
+{
+  "files": {
+    "main.css": "/jamies-vacation/static/css/main.00bdff4b.chunk.css",
+    "main.js": "/jamies-vacation/static/js/main.b425a6ce.chunk.js",
+    "main.js.map": "/jamies-vacation/static/js/main.b425a6ce.chunk.js.map",
+    "runtime-main.js": "/jamies-vacation/static/js/runtime-main.e31f6849.js",
+    "runtime-main.js.map": "/jamies-vacation/static/js/runtime-main.e31f6849.js.map",
+    "static/js/2.8f7176a1.chunk.js": "/jamies-vacation/static/js/2.8f7176a1.chunk.js",
+    "static/js/2.8f7176a1.chunk.js.map": "/jamies-vacation/static/js/2.8f7176a1.chunk.js.map",
+    "static/css/3.b7f3b785.chunk.css": "/jamies-vacation/static/css/3.b7f3b785.chunk.css",
+    "static/js/3.da3ced59.chunk.js": "/jamies-vacation/static/js/3.da3ced59.chunk.js",
+    "static/js/3.da3ced59.chunk.js.map": "/jamies-vacation/static/js/3.da3ced59.chunk.js.map",
+    "static/css/4.e1c601be.chunk.css": "/jamies-vacation/static/css/4.e1c601be.chunk.css",
+    "static/js/4.a5c2642c.chunk.js": "/jamies-vacation/static/js/4.a5c2642c.chunk.js",
+    "static/js/4.a5c2642c.chunk.js.map": "/jamies-vacation/static/js/4.a5c2642c.chunk.js.map",
+    "index.html": "/jamies-vacation/index.html",
+    "precache-manifest.5fae8b4f6235c01ef4c206d5fc98fba1.js": "/jamies-vacation/precache-manifest.5fae8b4f6235c01ef4c206d5fc98fba1.js",
+    "service-worker.js": "/jamies-vacation/service-worker.js",
+    "static/css/3.b7f3b785.chunk.css.map": "/jamies-vacation/static/css/3.b7f3b785.chunk.css.map",
+    "static/css/4.e1c601be.chunk.css.map": "/jamies-vacation/static/css/4.e1c601be.chunk.css.map",
+    "static/css/main.00bdff4b.chunk.css.map": "/jamies-vacation/static/css/main.00bdff4b.chunk.css.map",
+    "static/js/2.8f7176a1.chunk.js.LICENSE.txt": "/jamies-vacation/static/js/2.8f7176a1.chunk.js.LICENSE.txt",
+    "static/js/3.da3ced59.chunk.js.LICENSE.txt": "/jamies-vacation/static/js/3.da3ced59.chunk.js.LICENSE.txt",
+    "static/media/amsterdam.jpg": "/jamies-vacation/static/media/amsterdam.5b747391.jpg",
+    "static/media/semantic.min.css": "/jamies-vacation/static/media/outline-icons.f89ea91e.woff",
+    "static/media/budapest.jpg": "/jamies-vacation/static/media/budapest.2b3e1a91.jpg",
+    "static/media/madrid.jpg": "/jamies-vacation/static/media/madrid.3ba5be59.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.e31f6849.js",
+    "static/css/3.b7f3b785.chunk.css",
+    "static/js/3.da3ced59.chunk.js",
+    "static/css/main.00bdff4b.chunk.css",
+    "static/js/main.b425a6ce.chunk.js"
+  ]
+}
