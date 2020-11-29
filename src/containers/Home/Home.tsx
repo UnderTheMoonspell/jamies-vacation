@@ -48,10 +48,10 @@ const Home = () => {
     },
   ] as DropdownItemProps[];
 
-  const getCitiesInfo = () =>
+  const getCitiesInfo = useMemo(() =>
     cities.map((city: City, idx: number) => (
       <CityCard key={city.id} city={city} is_best={!idx} />
-    ));
+    )), [cities]);
 
   return (
     <div className='home'>
@@ -74,7 +74,7 @@ const Home = () => {
               onSortFieldChange={onChangeSort}
               data-testid='city-sort'
             />
-            <div className='results-container'>{getCitiesInfo()}</div>
+            <div className='results-container'>{getCitiesInfo}</div>
           </>
         )
       )}

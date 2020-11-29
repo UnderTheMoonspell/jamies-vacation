@@ -16,6 +16,8 @@ type SearchComponentProps = {
   clickHandler: (searchResult: any) => void; //TODO type,
 };
 
+//TODO when there are no flights
+
 export const CustomSearch: React.FC<SearchComponentProps> = React.memo(
   (props) => {
     const [searchTerm, setSearchTerm] = useState('');

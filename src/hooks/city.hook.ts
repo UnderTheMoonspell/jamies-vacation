@@ -43,7 +43,6 @@ export const useCity = (selectedCity: any) => {
       await Promise.all(Config.destinations.map(getCityWeather));
 
     getDestinationsWeather();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
