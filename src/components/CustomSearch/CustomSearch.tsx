@@ -1,6 +1,6 @@
 import Config from 'config';
 import { useAPI } from 'hooks/api.hook';
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useMemo, useState } from 'react';
 import { kiwiAPI } from 'services/api.service';
 import { CityItem } from '../CityItem/CityItem';
 
@@ -33,23 +33,24 @@ export const CustomSearch: React.FC<SearchComponentProps> = React.memo(
       setUrl(props.url(searchTerm), 'get');
     };
 
-    const canShowResults = () =>
-      (result && result.locations?.length > 1 && searchTerm.length >= 3) ||
-      (result &&
-        result.locations?.length === 1 &&
-        Config.destinations.findIndex(
-          (destination) => destination.name === result.locations[0].city.name
-        ) < 0);
 
-    const getFilteredResults = (): any[] => {
-      return result.locations.filter(
+    const canShowResults = useMemo(() => {
+      return (result?.length > 1 && searchTerm.length >= 3) ||
+      (result?.length === 1 &&
+        Config.destinations.findIndex(
+          (destination) => destination.name === result[0].city.name
+        ) < 0);
+    }, [result, searchTerm])
+
+    // Do not show the destinations
+    const getFilteredResults = useMemo(() => {
+      return canShowResults ? result.filter(
         (city: any) =>
           Config.destinations.findIndex(
             (destination) => destination.name === city.city.name
           ) < 0
-      ) as any[];
-    };
-    // Do not show the destinations
+      ) as any[] : [];
+    }, [canShowResults, result]);
 
     const clickItem = (searchResult: any) => {
       props.clickHandler(searchResult);
@@ -74,8 +75,8 @@ export const CustomSearch: React.FC<SearchComponentProps> = React.memo(
           className={`results transition ${!!searchTerm.length && 'visible'}`}
           data-testid='results-container'
         >
-          {canShowResults() ? (
-            getFilteredResults().map((searchResult: any) => (
+          {canShowResults ? (
+            getFilteredResults.map((searchResult: any) => (
               <div
                 className='result'
                 key={searchResult.id}

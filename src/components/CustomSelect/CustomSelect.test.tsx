@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import { Formik } from "formik";
 import React from "react";
 import { CustomSelect } from "./CustomSelect";
 import { CustomSelectProps } from "./CustomSelect";
@@ -15,12 +14,7 @@ const changeCallback = jest.fn();
 
 it("Renders CustomInput", () => {
   render(
-    <Formik
-      initialValues={{}}
-      onSubmit={changeCallback}
-    >
-      <CustomSelect {...props} onChange={changeCallback} data-testid="select" />
-    </Formik>
+    <CustomSelect {...props} onChange={changeCallback} data-testid="select" />
   );
 
   expect(screen.getByText("Select")).toBeInTheDocument();
