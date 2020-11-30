@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "140c9dd5221b70ebc1a302a6b8337a12",
+    "revision": "6563b8e6214bc428f13515d7e90758da",
     "url": "/jamies-vacation/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/jamies-vacation/static/css/3.b7f3b785.chunk.css"
   },
   {
-    "revision": "6ba52b14cbc29d2a3575",
+    "revision": "8564d3d93372dda36f56",
     "url": "/jamies-vacation/static/css/4.3c87dc37.chunk.css"
   },
   {
@@ -32,16 +32,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/jamies-vacation/static/js/3.da3ced59.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "6ba52b14cbc29d2a3575",
-    "url": "/jamies-vacation/static/js/4.8c448a1d.chunk.js"
+    "revision": "8564d3d93372dda36f56",
+    "url": "/jamies-vacation/static/js/4.6ebb572b.chunk.js"
   },
   {
     "revision": "9bc0b517a8da550160ef",
     "url": "/jamies-vacation/static/js/main.d4c35609.chunk.js"
   },
   {
-    "revision": "aeb5604025af2cfb9c9b",
-    "url": "/jamies-vacation/static/js/runtime-main.0d0e8643.js"
+    "revision": "7a0b08b554ba3b40010b",
+    "url": "/jamies-vacation/static/js/runtime-main.977292b7.js"
   },
   {
     "revision": "5b747391ddc92460634654aae5f6ea88",
