@@ -34,6 +34,9 @@ export const CustomSearch: React.FC<SearchComponentProps> = React.memo(
       setUrl(props.url(searchTerm), 'get');
     };
 
+    // TODO finding another way to filter out the cities so as to make CustomSearch not
+    // responsible for this to improve reusabillity
+    
     // Has results to show, useMemo to rerender only when result and searchterm changes
     const canShowResults = useMemo(() => {
       return (result?.length > 1 && searchTerm.length >= 3) ||
