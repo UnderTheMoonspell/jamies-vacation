@@ -2,9 +2,9 @@ import Config from 'config';
 import { useAPI } from 'hooks/api.hook';
 import React, { ReactElement, useEffect, useMemo, useState } from 'react';
 import { kiwiAPI } from 'services/api.service';
-import { CityItem } from '../CityItem/CityItem';
+import { AirportItem } from '../AirportItem/AirportItem';
 
-type SearchRenderComponents = typeof CityItem;
+type SearchRenderComponents = typeof AirportItem;
 
 type SearchRenderComponentsProps = any;
 
@@ -16,8 +16,7 @@ type SearchComponentProps = {
   clickHandler: (searchResult: any) => void; //TODO type,
 };
 
-//TODO when there are no flights
-
+//Memoization to avoid rerenders when parent state, not related to CustomSearch, changes
 export const CustomSearch: React.FC<SearchComponentProps> = React.memo(
   (props) => {
     const [searchTerm, setSearchTerm] = useState('');

@@ -7,14 +7,13 @@ import './Home.scss';
 import { useCity } from 'hooks/city.hook';
 import { City } from 'models/City';
 import { CustomSearch } from 'components/CustomSearch/CustomSearch';
-import { CityItem } from 'components/CityItem/CityItem';
+import { AirportItem } from 'components/AirportItem/AirportItem';
 import { CityCard } from 'components/CityCard/CityCard';
+import { Airport } from 'models/Airport';
 
 const Home = () => {
   const [selectedCity, setSelectedCity] = useState();
-  const { cities, isLoading, sortCities, finishedFetching } = useCity(
-    selectedCity
-  );
+  const { cities, isLoading, sortCities, finishedFetching } = useCity(selectedCity);
 
   const sortOptions = [
     {
@@ -32,12 +31,12 @@ const Home = () => {
   ] as DropdownItemProps[];
 
   const onSearchSelect = useCallback(
-    (targetCity) => setSelectedCity((prevCity) => targetCity),
+    (targetCity) => setSelectedCity(prevCity => targetCity),
     []
   );
 
   const renderSearchItem = useCallback(
-    (props: any) => <CityItem {...props} />,
+    (props: Airport) => <AirportItem {...props} />,
     []
   );
 

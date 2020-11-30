@@ -27,7 +27,7 @@ export const useCity = (selectedCity: any) => {
       )
     );
 
-  const getCityWeather = async (destination: any) => {
+  const getCityWeather = async (destination: City) => {
     //TODO rework apiHook to accept consecutive updates
     let cityWeather = await weatherAPI.get(
       Config.endpoints.GET_WEATHER_BY_CITY(destination.name) //TODO Types for destination cities
@@ -54,7 +54,7 @@ export const useCity = (selectedCity: any) => {
   }, []);
 
   useEffect(() => {
-    const getPriceInfo = async (destination: any) => {
+    const getPriceInfo = async (destination: City) => {
       setFinishedFetching(false);
       const ticketInfo = await kiwiAPI.get(
         Config.endpoints.GET_TICKET_INFO(
@@ -65,9 +65,9 @@ export const useCity = (selectedCity: any) => {
         ) //TODO add date as inputs
       );
       ticketInfo.data.length &&
-        setCities((cities) => {
+        setCities((cities: City[]) => {
           //TODO this could be normalized, the property access would be much more immediate
-          const newState = cities.map((city) => {
+          const newState = cities.map((city: City) => {
             if (city.name === destination.name) {
               return {
                 ...city,
@@ -83,7 +83,7 @@ export const useCity = (selectedCity: any) => {
     };
 
     const getDestinationsPrices = async () => {
-      setCities(prevCities => prevCities.map(city => ({...city, price: 0})))
+      setCities((prevCities: City[]) => prevCities.map((city: City) => ({...city, price: 0})))
       setIsLoading(true);
       await Promise.all(Config.destinations.map(getPriceInfo));
       setIsLoading(false);

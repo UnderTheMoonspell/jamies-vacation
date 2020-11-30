@@ -1,9 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
-import { CityItem } from './CityItem';
+import { AirportItem } from './AirportItem';
 
 const props = {
+  id: 1,
   name: 'Portela Aiport',
+  code: 'LIS',
   city: {
     name: 'Lisbon',
     country: {
@@ -13,7 +15,7 @@ const props = {
 };
 
 it('Renders CityItem', () => {
-  render(<CityItem {...props} />);
+  render(<AirportItem {...props} />);
 
   expect(screen.getByText('Portela Aiport')).toBeInTheDocument();
 });

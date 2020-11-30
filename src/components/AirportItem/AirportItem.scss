@@ -1,9 +1,9 @@
 @import 'styles/_mixins';
 
-.city-item {
+.airport {
   position: relative;
 
-  .airport {
+  .name {
     font-size: 10px;
     display: block;
     @include _text-truncate-at-line(1);

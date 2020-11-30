@@ -4,8 +4,9 @@ import {
   screen,
   waitFor,
 } from '@testing-library/react';
-import { CityItem } from 'components/CityItem/CityItem';
+import { AirportItem } from 'components/AirportItem/AirportItem';
 import Config from 'config';
+import { Airport } from 'models/Airport';
 import { City } from 'models/City';
 import React from 'react';
 import { kiwiAPI } from 'services/api.service';
@@ -37,7 +38,7 @@ fit('CustomSearch', async () => {
   render(
     <CustomSearch
       url={Config.endpoints.LOCATIONS}
-      renderedItem={(props: City) => <CityItem {...props} />}
+      renderedItem={(props: Airport) => <AirportItem {...props} />}
       clickHandler={clickHandler}
     />
   );
