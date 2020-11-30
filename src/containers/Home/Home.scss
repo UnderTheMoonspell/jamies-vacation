@@ -4,19 +4,15 @@
 .home {
   h1 {
     height: 100px;
+    width: 50%;
+    line-height: 50px;
     line-height: 100px;
     border-bottom: 1px solid gray;
-    width: 50%;
     margin: 0 auto;
     color: $primary;
 
     @include media-breakpoint-down(sm) {
-      width: 70%;
-    }
-
-    @include media-breakpoint-down(xs) {
-      width: 95%;
-      line-height: 50px;
+      width: 80%;
     }
   }
 

@@ -96,7 +96,7 @@ const Home = () => {
 
   return (
     <div className='home'>
-      <h1>Going back to office planner</h1>
+      <h1>Office planner</h1>
       <h3>Where are you flying from ?</h3>
       <CustomSearch
         url={Config.endpoints.LOCATIONS}
