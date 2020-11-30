@@ -4,6 +4,7 @@ import React, { ReactElement, useEffect, useMemo, useState } from 'react';
 import { kiwiAPI } from 'services/api.service';
 import { AirportItem } from '../AirportItem/AirportItem';
 
+// this type can be extended to accept new types of render components
 type SearchRenderComponents = typeof AirportItem;
 
 type SearchRenderComponentsProps = any;
@@ -13,10 +14,10 @@ type SearchComponentProps = {
     props: SearchRenderComponentsProps
   ) => ReactElement<SearchRenderComponents>;
   url: (searchTerm: string) => string;
-  clickHandler: (searchResult: any) => void; //TODO type,
+  clickHandler: (searchResult: any) => void;
 };
 
-//Memoization to avoid rerenders when parent state, not related to CustomSearch, changes
+// Memoization to avoid rerenders when parent state, not related to CustomSearch, changes
 export const CustomSearch: React.FC<SearchComponentProps> = React.memo(
   (props) => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -33,7 +34,7 @@ export const CustomSearch: React.FC<SearchComponentProps> = React.memo(
       setUrl(props.url(searchTerm), 'get');
     };
 
-    // Has results to show
+    // Has results to show, useMemo to rerender only when result and searchterm changes
     const canShowResults = useMemo(() => {
       return (result?.length > 1 && searchTerm.length >= 3) ||
       (result?.length === 1 &&
@@ -92,6 +93,7 @@ export const CustomSearch: React.FC<SearchComponentProps> = React.memo(
           className={`results transition ${areResultsVisible() && 'visible'}`}
           data-testid='results-container'
         >
+          {/* TODO This JSX code could have improved readability */}
           {canShowResults ? (
             getFilteredResults.map((searchResult: any) => (
               <div

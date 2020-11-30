@@ -6,7 +6,6 @@ import {
   waitFor,
   fireEvent,
   screen,
-  waitForElementToBeRemoved,
 } from '@testing-library/react';
 import { changeInput, selectOption } from 'services/test.helpers';
 import Config from 'config';
@@ -117,6 +116,7 @@ const flightTicketBudapestData = {
   ],
 };
 
+//TODO make the test more readable
 describe('Home', () => {
   it('Renders the list of results', async () => {
     weatherAPI.get = jest.fn();
@@ -130,10 +130,9 @@ describe('Home', () => {
       .calledWith(Config.endpoints.GET_WEATHER_BY_CITY('Budapest'))
       .mockReturnValue(weatherDataBudapest);
 
-    let container: any;
 
     await act(async () => {
-      container = render(
+      render(
         <BrowserRouter>
           <Home />
         </BrowserRouter>

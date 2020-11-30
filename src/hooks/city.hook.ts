@@ -28,9 +28,11 @@ export const useCity = (selectedCity: any) => {
     );
 
   const getCityWeather = async (destination: City) => {
-    //TODO rework apiHook to accept consecutive updates
+    //TODO rework apiHook to accept consecutive updates. The calls to setState are batched
+    //and so i wasnt able to use useAPI hook here as well because it would always be calling the last city of
+    //the destination array, Budapest
     let cityWeather = await weatherAPI.get(
-      Config.endpoints.GET_WEATHER_BY_CITY(destination.name) //TODO Types for destination cities
+      Config.endpoints.GET_WEATHER_BY_CITY(destination.name) //TODO Types for destination weather
     );
     setCities((cities) => [
       ...cities,
@@ -62,7 +64,7 @@ export const useCity = (selectedCity: any) => {
           destination.code,
           moment(new Date()).format(Config.dateFormat),
           moment(new Date()).add({ days: 1 }).format(Config.dateFormat)
-        ) //TODO add date as inputs
+        ) //TODO add date as inputs like a normal flight scanner website
       );
       ticketInfo.data.length &&
         setCities((cities: City[]) => {

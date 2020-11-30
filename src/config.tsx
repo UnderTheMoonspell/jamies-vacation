@@ -29,6 +29,7 @@ export default class Config {
       `/weather?q=${city}${OpenWeatherAPIKeyQS}&units=metric`,
     LOCATIONS: (term: string) =>
       `/locations?term=${term}&location_types=airport&sort=name`,
+    //TODO In a production app I would show flights with stopovers, it would mean having pagination or infinite scroll
     GET_TICKET_INFO: (
       from: string,
       to: string,

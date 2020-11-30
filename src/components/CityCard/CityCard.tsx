@@ -8,6 +8,8 @@ export type CityCardProps = {
   city: City;
 };
 
+
+//TODO add a link to go to the flight itself
 export const CityCard: React.FC<CityCardProps> = (props) => {
   return (
     <Card className={`city-card ${props.is_best && 'is-best'}`}>
