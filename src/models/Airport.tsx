@@ -12,4 +12,5 @@ type AirportCity = {
 
 type AirportCountry = {
   code: string;
+  name: string;
 }

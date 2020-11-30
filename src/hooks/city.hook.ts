@@ -13,7 +13,7 @@ export type CityHook = {
   sortCities: (field: string, direction: string) => void;
 };
 
-export const useCity = (selectedCity: any) => {
+export const useCity = (selectedAirport: any) => {
   const [cities, setCities] = useState<City[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [finishedFetching, setFinishedFetching] = useState<boolean>(false);
@@ -60,7 +60,7 @@ export const useCity = (selectedCity: any) => {
       setFinishedFetching(false);
       const ticketInfo = await kiwiAPI.get(
         Config.endpoints.GET_TICKET_INFO(
-          selectedCity.code,
+          selectedAirport.code,
           destination.code,
           moment(new Date()).format(Config.dateFormat),
           moment(new Date()).add({ days: 1 }).format(Config.dateFormat)
@@ -91,8 +91,8 @@ export const useCity = (selectedCity: any) => {
       setIsLoading(false);
     };
 
-    selectedCity?.name && getDestinationsPrices();
-  }, [selectedCity]);
+    selectedAirport?.name && getDestinationsPrices();
+  }, [selectedAirport]);
 
   return {
     cities,

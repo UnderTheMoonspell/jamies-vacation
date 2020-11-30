@@ -44,7 +44,7 @@ export const CustomSearch: React.FC<SearchComponentProps> = React.memo(
         Config.destinations.findIndex(
           (destination) => destination.name === result[0].city.name
         ) < 0);
-    }, [result, searchTerm])
+    }, [result, searchTerm.length])
 
     // Do not show the destinations
     const getFilteredResults = useMemo(() => {

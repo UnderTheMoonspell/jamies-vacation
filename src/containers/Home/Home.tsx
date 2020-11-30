@@ -12,8 +12,10 @@ import { CityCard } from 'components/CityCard/CityCard';
 import { Airport } from 'models/Airport';
 
 const Home = () => {
-  const [selectedCity, setSelectedCity] = useState();
-  const { cities, isLoading, sortCities, finishedFetching } = useCity(selectedCity);
+  const [selectedAirport, setSelectedAirport] = useState<Airport>();
+  const { cities, isLoading, sortCities, finishedFetching } = useCity(
+    selectedAirport
+  );
 
   const sortOptions = [
     {
@@ -31,7 +33,7 @@ const Home = () => {
   ] as DropdownItemProps[];
 
   const onSearchSelect = useCallback(
-    (targetCity) => setSelectedCity(prevCity => targetCity),
+    (airport) => setSelectedAirport(airport),
     []
   );
 
@@ -45,14 +47,6 @@ const Home = () => {
     [cities]
   );
 
-  const getCitiesInfo = useMemo(
-    () =>
-      cities.map((city: City, idx: number) => (
-        <CityCard key={city.id} city={city} is_best={!idx} />
-      )),
-    [cities]
-  );
-
   const onChangeSort = useCallback(
     (sortField: string) => {
       sortCities(
@@ -63,11 +57,17 @@ const Home = () => {
     [sortCities]
   );
 
-  const displayResults = useMemo(() => {
+  const flightResults = () => {
     if (finishedFetching) {
       if (!noAvailableFlights) {
         return (
           <>
+            <h3>
+              Flying from &nbsp;
+              <span className='selected-city'>
+                {selectedAirport?.name}, {selectedAirport?.city.country.name}
+              </span>
+            </h3>
             <CustomSort
               name='city-sort'
               placeholder='Sort By'
@@ -75,7 +75,11 @@ const Home = () => {
               onSortFieldChange={onChangeSort}
               data-testid='city-sort'
             />
-            <div className='results-container'>{getCitiesInfo}</div>
+            <div className='results-container'>
+              {cities.map((city: City, idx: number) => (
+                <CityCard key={city.id} city={city} is_best={!idx} />
+              ))}
+            </div>
           </>
         );
       } else {
@@ -86,13 +90,7 @@ const Home = () => {
         );
       }
     }
-  }, [
-    finishedFetching,
-    getCitiesInfo,
-    noAvailableFlights,
-    onChangeSort,
-    sortOptions,
-  ]);
+  };
 
   return (
     <div className='home'>
@@ -103,7 +101,7 @@ const Home = () => {
         renderedItem={renderSearchItem}
         clickHandler={onSearchSelect}
       />
-      {isLoading ? <CustomLoader /> : displayResults}
+      {isLoading ? <CustomLoader /> : flightResults()}
     </div>
   );
 };
