@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import { Airport } from 'models/Airport';
 import React from 'react';
 import { AirportItem } from './AirportItem';
 
@@ -12,7 +13,7 @@ const props = {
       code: 'pt',
     },
   },
-};
+} as Airport;
 
 it('Renders CityItem', () => {
   render(<AirportItem {...props} />);
